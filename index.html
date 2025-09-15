@@ -7,26 +7,82 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <h1>🎒 CampusCare - Lost & Found</h1>
+    <div class="logo"> CampusCare</div>
     <nav>
       <a href="#">Home</a>
-      <a href="#">Report Lost Item</a>
-      <a href="#">Report Found Item</a>
-      <a href="#">All Listings</a>
+      <a href="#" class="protected-btn">Report Lost</a>
+      <a href="#" class="protected-btn">Report Found</a>
+      <a href="#" class="protected-btn">Listings</a>
     </nav>
+    <div class="auth-buttons">
+      <a href="#" id="login-btn" class="btn">Login</a>
+      <a href="#" id="signup-btn" class="btn">Sign Up</a>
+    </div>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <section id="intro">
-      <h2>Welcome to CampusCare</h2>
-      <p>A simple system to manage lost and found items on campus.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h2>Welcome to CampusCare </h2>
+      <p>Lost something? Found something? Let's connect and return items to their rightful owners.</p>
+      <a href="#" class="btn">Report an Item</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="card">
+        <h3>📌 Report Lost Item</h3>
+        <p>Submit details about an item you lost on campus.</p>
+        <a href="#">Report Lost</a>
+      </div>
+      <div class="card">
+        <h3>📦 Report Found Item</h3>
+        <p>Help others by reporting something you’ve found.</p>
+        <a href="#">Report Found</a>
+      </div>
+      <div class="card">
+        <h3>📋 View Listings</h3>
+        <p>Browse all reported lost and found items.</p>
+        <a href="#">View All</a>
+      </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section class="cta">
+      <h2>Together we can make campus better 🩷</h2>
+      <p>Be a responsible student — use CampusCare to help others.</p>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>© 2025 CampusCare | Built with ❤️</p>
+    <p>© 2025 CampusCare | Built with ❤️ for Students</p>
   </footer>
+
+  <!-- Login & Signup Modals -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <input type="email" id="login-email" placeholder="Email" required>
+      <input type="password" id="login-password" placeholder="Password" required>
+      <button id="login-submit" class="btn">Login</button>
+    </div>
+  </div>
+
+  <div id="signup-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" id="signup-name" placeholder="Full Name" required>
+      <input type="email" id="signup-email" placeholder="Email" required>
+      <input type="password" id="signup-password" placeholder="Password" required>
+      <button id="signup-submit" class="btn">Sign Up</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
