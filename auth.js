@@ -74,6 +74,10 @@ function removeError(input) {
     
     input.style.borderColor = '#e8e8e8';
 }
+function getRedirectUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('redirect');
+}
 
 // Real-time validation
 document.addEventListener('DOMContentLoaded', function() {
@@ -186,12 +190,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Simulate API call
                 setTimeout(() => {
-                    alert('Login successful! (This is a demo)');
+                    alert('Login successful!');
                     submitBtn.classList.remove('loading');
                     submitBtn.textContent = originalText;
                     
                     // Here you would typically redirect to dashboard or make actual API call
                     // window.location.href = 'dashboard.html';
+                    // Redirect after login
+          const redirectUrl = getRedirectUrl();
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+          } else {
+            window.location.href = 'index.html';
+          }
                 }, 2000);
             }
         });
