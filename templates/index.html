@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusCare - Lost & Found</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">CampusCare</div>
+    <nav>
+      <a href="url_for('index')">Home</a>
+      <a href="/report/lost">Report Lost</a>
+      <a href="/report/found">Report Found</a>
+      <a href="/listings">View Listings</a>
+
+    </nav>
+    <div class="auth-buttons">
+      <a href="{{ url_for('auth') }}" id="login-btn" class="btn">Login</a>
+      <a href="{{ url_for('signup') }}" id="signup-btn" class="btn">Sign Up</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Welcome to CampusCare </h2>
+      <p>Lost something? Found something? Let's connect and return items to their rightful owners.</p>
+      <a href="{{ url_for('listings') }}" class="btn">View Reported Items</a>
+    </section>
+
+    <section class="features">
+      <div class="card">
+        <h3>📌 Report Lost Item</h3>
+        <p>Submit details about an item you lost on campus.</p>
+        <a href="{{ url_for('lost') }}">Report Lost</a>
+      </div>
+      <div class="card">
+        <h3>📦 Report Found Item</h3>
+        <p>Help others by reporting something you’ve found.</p>
+        <a href="{{ url_for('found') }}">Report Found</a>
+      </div>
+      <div class="card">
+        <h3>📋 View Listings</h3>
+        <p>Browse all reported lost and found items.</p>
+        <a href="{{ url_for('listings') }}">View All</a>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Together we can make campus better 🩷</h2>
+      <p>Be a responsible student — use CampusCare to help others.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 CampusCare | Built with ❤️ for Students</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
