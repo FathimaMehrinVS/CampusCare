@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Listings - CampusCare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Simple styling for the listings page */
+        body { font-family: sans-serif; background-color: #f4f7f6; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        header .logo { font-size: 1.5rem; font-weight: bold; }
+        h1, h2 { text-align: center; color: #333; }
+        .listings-section { margin-bottom: 3rem; }
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .item-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .item-card:hover { transform: translateY(-5px); }
+        .item-card img { width: 100%; height: 200px; object-fit: cover; }
+        .item-card-content { padding: 1rem; }
+        .item-card h3 { margin-top: 0; color: #0056b3; }
+        .item-card p { margin: 0.5rem 0; }
+        .item-card .category {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .item-card .contact { font-weight: bold; }
+        .no-items { text-align: center; color: #666; padding: 2rem; background-color: #fff; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><a href="{{ url_for('index') }}" style="text-decoration:none; color: inherit;">CampusCare</a></div>
+    </header>
+
+    <div class="container">
+        <h1>All Reported Items</h1>
+
+        <section class="listings-section">
+            <h2>🔍 Found Items</h2>
+            <div class="item-grid">
+                {% if found_items %}
+                    {% for item in found_items %}
+                    <div class="item-card">
+                        {% if item.image_filename %}
+                            <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="{{ item.item_name }}">
+                        {% endif %}
+                        <div class="item-card-content">
+                            <h3>{{ item.item_name }}</h3>
+                            <span class="category">{{ item.category }}</span>
+                            <p>{{ item.description }}</p>
+                            <p class="contact">Contact: {{ item.contact }}</p>
+                            <small>Reported on: {{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-items">No found items have been reported yet.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="listings-section">
+            <h2>❓ Lost Items</h2>
+            <div class="item-grid">
+                 {% if lost_items %}
+                    {% for item in lost_items %}
+                    <div class="item-card">
+                        {% if item.image_filename %}
+                            <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="{{ item.item_name }}">
+                        {% endif %}
+                        <div class="item-card-content">
+                            <h3>{{ item.item_name }}</h3>
+                            <span class="category">{{ item.category }}</span>
+                            <p>{{ item.description }}</p>
+                            <p class="contact">Contact: {{ item.contact }}</p>
+                            <small>Reported on: {{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-items">No lost items have been reported yet.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</body>
+</html>
