@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Report Found Item</title>
-  <link rel="stylesheet" href="found.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/found.css') }}">
 </head>
 <body>
   <header id="header">
@@ -14,7 +14,7 @@
 
   <main id="main">
     <section class="section" id="found-form-section">
-      <form id="found-form">
+      <form id="found-form" action="{{ url_for('report_found') }}" method="POST" enctype="multipart/form-data">
         <label for="item-name">Item Name:</label><br>
         <input type="text" id="item-name" name="item-name" placeholder="Enter item name" required><br><br>
 

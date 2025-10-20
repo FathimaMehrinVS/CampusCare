@@ -4,17 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CampusCare - Lost & Found</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <!-- Header -->
   <header>
     <div class="logo"> CampusCare</div>
     <nav>
-      <a href="#">Home</a>
-      <a href="auth.html?redirect=lost_report/lost.html" class="btn">Report Lost</a>
-      <a href="auth.html?redirect=founditem/found.html" class="btn">Report Found</a>
-      <a href="#" class="protected-btn">Listings</a>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('lost_page') }}" class="btn">Report Lost</a>
+      <a href="{{ url_for('found_page') }}" class="btn">Report Found</a>
+      <a href="{{ url_for('listings_page') }}" class="protected-btn">Listings</a>
     </nav>
     <div class="auth-buttons">
       <a href="auth.html" id="login-btn" class="btn">Login</a>
@@ -22,47 +21,41 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main>
-    <!-- Hero Section -->
     <section class="hero">
       <h2>Welcome to CampusCare </h2>
       <p>Lost something? Found something? Let's connect and return items to their rightful owners.</p>
-      <a href="#" class="btn">Report an Item</a>
+      <a href="{{ url_for('listings_page') }}" class="btn">View All Items</a>
     </section>
 
-    <!-- Features Section -->
     <section class="features">
       <div class="card">
         <h3>📌 Report Lost Item</h3>
         <p>Submit details about an item you lost on campus.</p>
-        <a href="lost_report/lost.html">Report Lost</a>
+        <a href="{{ url_for('lost_page') }}">Report Lost</a>
       </div>
       <div class="card">
         <h3>📦 Report Found Item</h3>
         <p>Help others by reporting something you’ve found.</p>
-        <a href="founditem/found.html">Report Found</a>
+        <a href="{{ url_for('found_page') }}">Report Found</a>
       </div>
       <div class="card">
         <h3>📋 View Listings</h3>
         <p>Browse all reported lost and found items.</p>
-        <a href="#">View All</a>
+        <a href="{{ url_for('listings_page') }}">View All</a>
       </div>
     </section>
 
-    <!-- Call To Action -->
     <section class="cta">
       <h2>Together we can make campus better 🩷</h2>
       <p>Be a responsible student — use CampusCare to help others.</p>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer>
     <p>© 2025 CampusCare | Built with ❤️ for Students</p>
   </footer>
 
-  <!-- Login & Signup Modals -->
   <div id="login-modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -84,6 +77,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
