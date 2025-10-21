@@ -8,8 +8,11 @@
 </head>
 <body>
   <header id="header">
-    <h1 class="title">Report Found Item</h1>
-    <p class="subtitle">Fill in the details about the found item</p>
+    <a href="{{ url_for('index') }}" class="home-button">Home</a>
+    <div class="header-content">
+      <h1 class="title">Report Found Item</h1>
+      <p class="subtitle">Fill in the details about the found item</p>
+    </div>
   </header>
 
   <main id="main">
@@ -35,7 +38,7 @@
         <input type="file" id="item-image" name="item-image" accept="image/*"><br><br>
 
         <label for="contact">Contact Details:</label><br>
-        <input type="text" id="contact" name="contact" placeholder="Enter your contact details" required><br><br>
+        <input type="text" id="contact" name="contact" placeholder="Enter your contact details" value="{{ current_user.email }}" required><br><br>
 
         <button type="submit" class="found_button">Submit</button>
       </form>

@@ -1,50 +1,69 @@
-console.log("CampusCare frontend loaded 🚀");
-// Modal Elements
-const loginModal = document.getElementById("login-modal");
-const signupModal = document.getElementById("signup-modal");
-const loginBtn = document.getElementById("login-btn");
-const signupBtn = document.getElementById("signup-btn");
-const closeButtons = document.querySelectorAll(".close");
+document.addEventListener('DOMContentLoaded', function() {
+    const authModal = document.getElementById('auth-modal');
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const closeBtn = authModal.querySelector('.close');
 
-// Open Modals
-loginBtn.onclick = () => loginModal.style.display = "block";
-signupBtn.onclick = () => signupModal.style.display = "block";
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
 
-// Close Modals
-closeButtons.forEach(btn => {
-  btn.onclick = () => btn.parentElement.parentElement.style.display = "none";
-});
-
-// Close modal on outside click
-window.onclick = (e) => {
-  if (e.target.classList.contains("modal")) {
-    e.target.style.display = "none";
-  }
-}
-
-// Fake Authentication (for now)
-let isLoggedIn = false;
-
-// Protected Buttons
-document.querySelectorAll(".protected-btn").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    if (!isLoggedIn) {
-      e.preventDefault();
-      alert("Please login first!");
-      loginModal.style.display = "block";
+    // Only add listeners if the buttons exist (i.e., user is not logged in)
+    if (loginBtn && signupBtn) {
+        // Function to open the modal and show the login form
+        loginBtn.onclick = function(e) {
+            e.preventDefault();
+            authModal.style.display = 'block';
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+        }
+        // Function to open the modal and show the signup form
+        signupBtn.onclick = function(e) {
+            e.preventDefault();
+            authModal.style.display = 'block';
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+        }
     }
-  });
+
+    // Function to close the modal
+    closeBtn.onclick = function() {
+        authModal.style.display = 'none';
+    }
+
+    // Close modal if user clicks outside of the content
+    window.onclick = function(event) {
+        if (event.target == authModal) {
+            authModal.style.display = 'none';
+        }
+    }
+
+    // Handle protected links (for future use if needed)
+    const protectedButtons = document.querySelectorAll('.protected-btn');
+    protectedButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // A simple check: if the login button doesn't exist, the user is logged in.
+            const isLoggedIn = !document.getElementById('login-btn');
+
+            if (!isLoggedIn) {
+                e.preventDefault();
+                flash('Please log in to access this feature.', 'error');
+                // Optionally, open the login modal
+                authModal.style.display = 'block';
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+            }
+        });
+    });
+
+    // Helper function to show a temporary message
+    function flash(message, category) {
+        const flashContainer = document.querySelector('.flash-messages');
+        if (flashContainer) {
+            const flashDiv = document.createElement('div');
+            flashDiv.className = `flash ${category}`;
+            flashDiv.textContent = message;
+            flashContainer.prepend(flashDiv);
+            setTimeout(() => flashDiv.remove(), 4000);
+        }
+    }
 });
-
-// Login & Signup Submit (fake, for now)
-document.getElementById("login-submit").onclick = () => {
-  isLoggedIn = true;
-  loginModal.style.display = "none";
-  alert("Logged in successfully! 🎉");
-};
-
-document.getElementById("signup-submit").onclick = () => {
-  isLoggedIn = true;
-  signupModal.style.display = "none";
-  alert("Signed up successfully! 🎉");
-};

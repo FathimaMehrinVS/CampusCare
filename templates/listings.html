@@ -41,7 +41,12 @@
 </head>
 <body>
     <header>
-        <div class="logo"><a href="{{ url_for('index') }}" style="text-decoration:none; color: inherit;">CampusCare</a></div>
+        <a href="{{ url_for('index') }}" class="home-button" style="text-decoration:none; color: white; background: #7b2cbf; padding: 8px 16px; border-radius: 20px; font-weight: bold; position: absolute; left: 20px; top: 15px;">Home</a>
+        <div class="logo" style="width: 100%; text-align: center;">
+            <a href="{{ url_for('index') }}" style="text-decoration:none; color: inherit;">
+                CampusCare
+            </a>
+        </div>
     </header>
 
     <div class="container">
