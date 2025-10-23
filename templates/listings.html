@@ -9,6 +9,8 @@
         /* Simple styling for the listings page */
         body { font-family: sans-serif; background-color: #f4f7f6; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .row { display: flex; justify-content: space-between; }
+        .listings-section { width: 48%; }
         header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem; }
         header .logo { font-size: 1.5rem; font-weight: bold; }
         h1, h2 { text-align: center; color: #333; }
@@ -37,6 +39,19 @@
         }
         .item-card .contact { font-weight: bold; }
         .no-items { text-align: center; color: #666; padding: 2rem; background-color: #fff; border-radius: 8px; }
+        .btn-reclaim {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-reclaim:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +66,36 @@
 
     <div class="container">
         <h1>All Reported Items</h1>
+
+        <div class="row">
+        <section class="listings-section">
+            <h2>❓ Lost Items</h2>
+            <div class="item-grid">
+                 {% if lost_items %}
+                    {% for item in lost_items %}
+                    <div class="item-card">
+                        {% if item.image_filename %}
+                            <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="{{ item.item_name }}">
+                        {% endif %}
+                        <div class="item-card-content">
+                            <h3>{{ item.item_name }}</h3>
+                            <span class="category">{{ item.category }}</span>
+                            <p>{{ item.description }}</p>
+                            <p class="contact">Contact: {{ item.contact }}</p>
+                            <small>Reported on: {{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                            {% if current_user.is_authenticated and item.user_id == current_user.id %}
+                            <form action="{{ url_for('mark_lost_as_claimed', item_id=item.id) }}" method="POST" style="margin-top: 1rem;">
+                                <button type="submit" class="btn-reclaim">Mark as Claimed</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-items">No lost items have been reported yet.</p>
+                {% endif %}
+            </div>
+        </section>
 
         <section class="listings-section">
             <h2>🔍 Found Items</h2>
@@ -67,6 +112,11 @@
                             <p>{{ item.description }}</p>
                             <p class="contact">Contact: {{ item.contact }}</p>
                             <small>Reported on: {{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                            {% if current_user.is_authenticated and item.user_id == current_user.id %}
+                            <form action="{{ url_for('mark_found_as_claimed', item_id=item.id) }}" method="POST" style="margin-top: 1rem;">
+                                <button type="submit" class="btn-reclaim">Mark as Claimed</button>
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
@@ -75,30 +125,6 @@
                 {% endif %}
             </div>
         </section>
-
-        <section class="listings-section">
-            <h2>❓ Lost Items</h2>
-            <div class="item-grid">
-                 {% if lost_items %}
-                    {% for item in lost_items %}
-                    <div class="item-card">
-                        {% if item.image_filename %}
-                            <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="{{ item.item_name }}">
-                        {% endif %}
-                        <div class="item-card-content">
-                            <h3>{{ item.item_name }}</h3>
-                            <span class="category">{{ item.category }}</span>
-                            <p>{{ item.description }}</p>
-                            <p class="contact">Contact: {{ item.contact }}</p>
-                            <small>Reported on: {{ item.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="no-items">No lost items have been reported yet.</p>
-                {% endif %}
-            </div>
-        </section>
-    </div>
+        </div>
 </body>
 </html>

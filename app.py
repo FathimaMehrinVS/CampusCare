@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 
-# --- App Configuration ---
+#App Configuration
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key' # Change this to a random secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///campuscare.db'
@@ -22,7 +22,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'index' # Redirect to index page for login
 
 
-# --- Database Models ---
+# Database Models
 class FoundItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String(100), nullable=False)
@@ -67,11 +67,35 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.email}>'
 
+class FoundItemReclaimed(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    original_id = db.Column(db.Integer)
+    item_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    image_filename = db.Column(db.String(100), nullable=True)
+    contact = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    reclaimed_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class LostItemReclaimed(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    original_id = db.Column(db.Integer)
+    item_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    image_filename = db.Column(db.String(100), nullable=True)
+    contact = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    reclaimed_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# --- Routes ---
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -94,7 +118,56 @@ def listings_page():
     lost_items = LostItem.query.order_by(LostItem.timestamp.desc()).all()
     return render_template('listings.html', found_items=found_items, lost_items=lost_items)
 
-# --- Auth Routes ---
+
+@app.route('/mark-found-as-claimed/<int:item_id>', methods=['POST'])
+@login_required
+def mark_found_as_claimed(item_id):
+    item = FoundItem.query.get_or_404(item_id)
+    if item.user_id != current_user.id:
+        flash('You are not authorized to perform this action.', 'error')
+        return redirect(url_for('listings_page'))
+
+    reclaimed_item = FoundItemReclaimed(
+        original_id=item.id,
+        item_name=item.item_name,
+        description=item.description,
+        category=item.category,
+        image_filename=item.image_filename,
+        contact=item.contact,
+        user_id=item.user_id,
+        timestamp=item.timestamp
+    )
+    db.session.add(reclaimed_item)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Item marked as reclaimed.', 'success')
+    return redirect(url_for('listings_page'))
+
+@app.route('/mark-lost-as-claimed/<int:item_id>', methods=['POST'])
+@login_required
+def mark_lost_as_claimed(item_id):
+    item = LostItem.query.get_or_404(item_id)
+    if item.user_id != current_user.id:
+        flash('You are not authorized to perform this action.', 'error')
+        return redirect(url_for('listings_page'))
+
+    reclaimed_item = LostItemReclaimed(
+        original_id=item.id,
+        item_name=item.item_name,
+        description=item.description,
+        category=item.category,
+        image_filename=item.image_filename,
+        contact=item.contact,
+        user_id=item.user_id,
+        timestamp=item.timestamp
+    )
+    db.session.add(reclaimed_item)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Item marked as reclaimed.', 'success')
+    return redirect(url_for('listings_page'))
+
+# Auth Routes 
 @app.route('/signup', methods=['POST'])
 def signup():
     email = request.form.get('email')
@@ -136,7 +209,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- Form Submission Routes ---
+# Form Submission Routes
 @app.route('/report-found', methods=['POST'])
 @login_required
 def report_found():
@@ -180,7 +253,7 @@ def report_lost():
     db.session.commit()
     return redirect(url_for('listings_page'))
     
-# --- Main Execution ---
+# Main Execution
 if __name__ == '__main__':
     with app.app_context():
         db.create_all() # This creates the database and tables
